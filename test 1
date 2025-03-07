@@ -1,0 +1,13 @@
+def alternate_case():
+    input_text = str(input("\nPlease enter any word or sentence: "))
+
+    result = []
+    for i, char in enumerate(input_text):
+        if i % 2 == 0:
+            result.append(char.upper())
+        else:
+            result.append(char.lower())
+    return ''.join(result)
+
+output_text = alternate_case()
+print(output_text)
