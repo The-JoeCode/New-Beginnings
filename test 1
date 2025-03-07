@@ -1,13 +1,74 @@
-def alternate_case():
-    input_text = str(input("\nPlease enter any word or sentence: "))
+import random
+def guess_the_word():
+    # Word list
+    word_list = ["ALGERIA", "ANGOLA", "CHAD", "EGYPT", "ETHIOPIA", "GHANA", "KENYA", "NAMIBIA", "NIGERIA", "SENEGAL", "SOMALIA", "ZAMBIA"]
+    secret_word = random.choice(word_list)
 
-    result = []
-    for i, char in enumerate(input_text):
-        if i % 2 == 0:
-            result.append(char.upper())
+    # Game setup
+    attempts = 5
+    guessed_letters = ["_"] * len(secret_word)
+
+    print("Welcome to the Guess the Word game!")
+    print(f"The word has {len(secret_word)} letters: {' '.join(guessed_letters)}")
+    print("Hint: The word is an African country.")
+
+    while attempts > 0:
+        print(f"\nAttempts remaining: {attempts}")
+        guess = input("Enter a letter, multiple letters, or the whole word: ").upper()
+
+        # Input validation: Check if the input is alphabetic
+        if not guess.isalpha():
+            print("Please enter only letters. Try again.")
+            continue
+        
+        # Single-letter guess
+        if len(guess) == 1:
+            if guess in secret_word:
+                print("Correct guess!")
+                for idx, letter in enumerate(secret_word):
+                    if letter == guess:
+                        guessed_letters[idx] = guess
+                print("Current word: " + " ".join(guessed_letters))
+            else:
+                print(f"The letter '{guess}' is not in the word.")
+                attempts -= 1
+
+        # Multi-letter guess (partial guess)
+        elif 1 < len(guess) < len(secret_word):
+            print(f"You entered {len(guess)} letters, '{guess}'.\n")
+            correct_count = 0
+            for letter in guess:
+                if letter in secret_word:
+                    correct_count += 1
+                    for idx, char in enumerate(secret_word):
+                        if char == letter:
+                            guessed_letters[idx] = letter
+                else:
+                    print(f"The letter '{letter}' is not in the word.\n")
+                    attempts -= 1
+            print(f"You got {correct_count} letters correct!")
+            print("Current word: " + " ".join(guessed_letters))
+
+        # Whole-word guess
+        elif len(guess) == len(secret_word):
+            if guess == secret_word:
+                print(f"Congratulations! You guessed the word: {secret_word}")
+                return
+            else:
+                print(f"'{guess}' is not the correct word.\n")
+                attempts -= 1
+
+        # Invalid input
         else:
-            result.append(char.lower())
-    return ''.join(result)
+            print("Invalid input. Please try again.")
 
-output_text = alternate_case()
-print(output_text)
+        # Check for win condition
+        if "_" not in guessed_letters:
+            print(f"Well done! You guessed the word: {secret_word}\n")
+            return
+
+    # Out of attempts
+    print(f"\nGAME OVER!! \nYou're out of attempts! The word was: {secret_word}\n")
+
+# Run the game
+guess_the_word()
